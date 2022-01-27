@@ -63,7 +63,7 @@ class PublicUserApiTest(TestCase):
         payload = {'email': 'test@email.com', 'password': 'wrong'}
 
         res = self.client.post(TOKEN_URL, payload)
-        self.assertIn('token', res.data)
+        self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_token_no_user(self):
@@ -71,11 +71,11 @@ class PublicUserApiTest(TestCase):
         payload = {'email': 'test@email.com', 'password': 'pass123', 'name': 'test name'}
 
         res = self.client.post(TOKEN_URL, payload)
-        self.assertIn('token', res.data)
+        self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_token_missing_field(self):
         # probar que el email y contraseña sean requeridas
         res = self.client.post(TOKEN_URL, {'email': 'one', 'password': ''})
-        self.assertIn('token', res.data)
+        self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
